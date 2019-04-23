@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 public abstract class AbstractShell extends Actor
 {
@@ -33,6 +33,7 @@ public abstract class AbstractShell extends Actor
         deceleration = 0;
 
         accelerationVec.add(new Vector2(acceleration, 0).setAngle(angle) );
+
     }
 
     @Override
@@ -40,20 +41,29 @@ public abstract class AbstractShell extends Actor
     {
         super.act(delta);
 
-        /* Gravity vector*/
+        /* Gravity */
         accelerationVec.add(new Vector2(400, 0).setAngle(270) );
+
+
         velocityVec.add( accelerationVec.x * delta, accelerationVec.y * delta );
+
         float speed = velocityVec.len();
 
         if (accelerationVec.len() == 0)
             speed -= deceleration * delta;
 
         speed = MathUtils.clamp(speed, 0, maxSpeed);
+
         setSpeed(speed);
+
         moveBy( velocityVec.x * delta, velocityVec.y * delta );
+
         accelerationVec.set(0,0);
+
+
         rotate();
     }
+
 
     public void setSpeed(float speed)
     {
@@ -62,6 +72,7 @@ public abstract class AbstractShell extends Actor
         else
             velocityVec.setLength(speed);
     }
+
 
     public float getMotionAngle()
     {

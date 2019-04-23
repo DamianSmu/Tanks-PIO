@@ -10,11 +10,12 @@ public class StandardShell extends AbstractShell
     public StandardShell(Stage stage, float posX, float posY, float angle, float acceleration)
     {
         super(stage, posX, posY, angle, acceleration);
+
         texture = new TextureRegion(new Texture("tank_bullet3.png"));
 
-        addAction(Actions.sizeTo(38, 26, 0.3f));
-        /* Set alpha to 0 */
+        addAction(Actions.sizeTo(38, 26, 0.2f));
+
         getColor().a = 0;
-        addAction(Actions.fadeIn(0.5f));
+        addAction(Actions.fadeIn(0.2f));
     }
 }
