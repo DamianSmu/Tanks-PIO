@@ -3,34 +3,49 @@ package com.pio.tanks;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+
+import java.sql.Time;
 
 public class GameScreen implements Screen, InputProcessor
 {
+    private Stage mainStage;
     private OrthographicCamera camera;
+    private PlayerManager playerManager;
 
     /* Pressed keys */
     private boolean keyLeftPressed = false;
     private boolean keyRightPressed = false;
     private boolean keyRotateTurretUpPressed = false;
     private boolean keyRotateTurretDownPressed = false;
+    private long spacePressTimeStart;
+    private long spacePressTimeEnd;
+    private int spacePressTimeMax = 3000;
 
     /* Actors */
-    private Tank tank;
     private Background background;
 
-    /* Actor container */
-    private Stage mainStage;
+
+    /* Power */
+    private Texture power;
 
     public GameScreen()
     {
         camera = new OrthographicCamera();
         mainStage = new Stage(new FitViewport(1000, 800, camera));
 
-        background = new Background(mainStage);
+        playerManager = new PlayerManager(mainStage);
 
-        tank = new Tank(200, 200, mainStage);
+       background = new Background(mainStage);
+       background.setPosition(0, 0);
+       background.toBack();
+
+       power = new Texture("power.png");
     }
 
     @Override
@@ -39,6 +54,7 @@ public class GameScreen implements Screen, InputProcessor
         InputMultiplexer im = (InputMultiplexer) Gdx.input.getInputProcessor();
         im.addProcessor(this);
         im.addProcessor(mainStage);
+
     }
 
     @Override
@@ -51,63 +67,17 @@ public class GameScreen implements Screen, InputProcessor
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         mainStage.draw();
-    }
 
-    @Override
-    public boolean keyDown(int keycode)
-    {
-        switch (keycode)
+        if(spacePressTimeStart > 0)
         {
-            case Input.Keys.D:
-                keyRightPressed = true;
-                break;
-            case Input.Keys.A:
-                keyLeftPressed = true;
-                break;
-            case Input.Keys.R:
-                keyRotateTurretUpPressed = true;
-                break;
-            case Input.Keys.F:
-                keyRotateTurretDownPressed = true;
-                break;
-            case Input.Keys.SPACE:
-                tank.shoot();
-                break;
-        }
-        return false;
-    }
+            mainStage.getBatch().begin();
+            int precent = Math.round((MathUtils.clamp(TimeUtils.millis() - spacePressTimeStart, 0, spacePressTimeMax)/(float)spacePressTimeMax) * 100);
+            TextureRegion powerRegion = new TextureRegion(power,precent , 20 );
 
-    @Override
-    public boolean keyUp(int keycode)
-    {
-        switch (keycode)
-        {
-            case Input.Keys.D:
-                keyRightPressed = false;
-                break;
-            case Input.Keys.A:
-                keyLeftPressed = false;
-                break;
-            case Input.Keys.R:
-                keyRotateTurretUpPressed = false;
-                break;
-            case Input.Keys.F:
-                keyRotateTurretDownPressed = false;
-                break;
-        }
-        return false;
-    }
 
-    private void processInput()
-    {
-        if (keyLeftPressed)
-            tank.moveBy(0);
-        if (keyRightPressed)
-            tank.moveBy(1);
-        if (keyRotateTurretUpPressed)
-            tank.rotateTurret(0);
-        if (keyRotateTurretDownPressed)
-            tank.rotateTurret(1);
+            mainStage.getBatch().draw(powerRegion, 100, 80);
+            mainStage.getBatch().end();
+        }
     }
 
     @Override
@@ -138,6 +108,58 @@ public class GameScreen implements Screen, InputProcessor
     public void dispose()
     {
 
+    }
+
+    @Override
+    public boolean keyDown(int keycode)
+    {
+        switch (keycode)
+        {
+            case Input.Keys.D:
+                keyRightPressed = true;
+                break;
+            case Input.Keys.A:
+                keyLeftPressed = true;
+                break;
+            case Input.Keys.R:
+                keyRotateTurretUpPressed = true;
+                break;
+            case Input.Keys.F:
+                keyRotateTurretDownPressed = true;
+                break;
+            case Input.Keys.SPACE:
+                spacePressTimeStart = TimeUtils.millis();
+                break;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode)
+    {
+        switch (keycode)
+        {
+            case Input.Keys.D:
+                keyRightPressed = false;
+                break;
+            case Input.Keys.A:
+                keyLeftPressed = false;
+                break;
+            case Input.Keys.R:
+                keyRotateTurretUpPressed = false;
+                break;
+            case Input.Keys.F:
+                keyRotateTurretDownPressed = false;
+                break;
+            case Input.Keys.SPACE:
+                spacePressTimeEnd = TimeUtils.millis() - spacePressTimeStart;
+                MathUtils.clamp(spacePressTimeEnd, 0, spacePressTimeMax);
+                spacePressTimeStart = 0;
+                break;
+        }
+
+        return false;
     }
 
     @Override
@@ -175,5 +197,22 @@ public class GameScreen implements Screen, InputProcessor
     {
         return false;
     }
-}
 
+    private void processInput()
+    {
+        if (keyLeftPressed)
+            playerManager.getActiveTank().moveBy(0);
+        if (keyRightPressed)
+            playerManager.getActiveTank().moveBy(1);
+        if (keyRotateTurretUpPressed)
+            playerManager.getActiveTank().rotateTurret(0);
+        if (keyRotateTurretDownPressed)
+            playerManager.getActiveTank().rotateTurret(1);
+        if(spacePressTimeEnd > 0.3f)
+        {
+            playerManager.getActiveTank().shot(spacePressTimeEnd);
+            spacePressTimeEnd = 0;
+            playerManager.nextTurn();
+        }
+    }
+}
