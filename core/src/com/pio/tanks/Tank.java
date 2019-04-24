@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.utils.Align;
 public class Tank extends Group
 {
     private TextureRegion texture;
+    public Rectangle rectangle;
     private Turret turret;
     private Stage stage;
     private  boolean isRight;
@@ -28,6 +30,8 @@ public class Tank extends Group
         setPosition(posX, posY);
         setWidth(83);
         setHeight(49);
+
+        rectangle = new Rectangle(getX(),getY(),getWidth(),getHeight());
 
         turret = new Turret(stage);
         addActor(turret);
@@ -70,6 +74,7 @@ public class Tank extends Group
             moveBy(-2, 0);
         if (moveDirection == 1)
             moveBy(2, 0);
+        rectangle.setPosition(getX(),getY());
     }
     public void rotateTurret(int rotateDirection)
     {

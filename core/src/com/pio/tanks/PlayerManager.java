@@ -5,9 +5,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class PlayerManager
 {
-    private Tank tank1;
-    private Tank tank2;
-    private Tank activeTank;
+    private static Tank tank1;
+    private static Tank tank2;
+    private static Tank activeTank;
 
     public PlayerManager(Stage stage)
     {
@@ -24,7 +24,7 @@ public class PlayerManager
             activeTank = tank1;
     }
 
-    public Tank getActiveTank()
+    public static Tank getActiveTank()
     {
         return activeTank;
     }

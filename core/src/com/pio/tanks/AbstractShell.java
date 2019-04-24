@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 public abstract class AbstractShell extends Actor
 {
     protected TextureRegion texture;
+    protected Rectangle rectangle;
 
     private Vector2 velocityVec;
     private Vector2 accelerationVec;
@@ -57,7 +59,11 @@ public abstract class AbstractShell extends Actor
         setSpeed(speed);
 
         moveBy( velocityVec.x * delta, velocityVec.y * delta );
-
+        rectangle.setPosition(getX(),getY());
+        if (rectangle.overlaps(PlayerManager.getActiveTank().rectangle)) {
+            PlayerManager.getActiveTank().remove();
+            this.remove();
+        }
         accelerationVec.set(0,0);
 
 

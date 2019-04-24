@@ -2,6 +2,7 @@ package com.pio.tanks;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
@@ -12,6 +13,7 @@ public class StandardShell extends AbstractShell
         super(stage, posX, posY, angle, acceleration);
 
         texture = new TextureRegion(new Texture("tank_bullet3.png"));
+        rectangle = new Rectangle(getX(),getY(),getWidth(),getHeight());
 
         addAction(Actions.sizeTo(38, 26, 0.2f));
 
