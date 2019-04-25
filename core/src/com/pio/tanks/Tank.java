@@ -17,13 +17,16 @@ public class Tank extends Group
     private TextureRegion texture;
     public Rectangle rectangle;
     private Turret turret;
+    private PowerBar powerBar;
     private Stage stage;
-    private  boolean isRight;
+    private int hp;
+    private String playerName;
 
-    public Tank(float posX, float posY, Stage stage, boolean isRight)
+    public Tank(float posX, float posY, Stage stage, boolean isPositionedRight)
     {
-        super();
         this.stage = stage;
+
+        hp = 100;
 
         stage.addActor(this);
         texture = new TextureRegion(new Texture("tanks_tankGreen_body1.png"));
@@ -39,9 +42,12 @@ public class Tank extends Group
         turret.setOrigin(0, turret.getHeight()/2f);
         turret.toFront();
 
-
-        if(!isRight)
+        if(!isPositionedRight)
             changeToLeft();
+
+        powerBar = new PowerBar(stage);
+        addActor(powerBar);
+        powerBar.setPosition(-9, -20);
     }
 
     private void changeToLeft()
@@ -49,7 +55,6 @@ public class Tank extends Group
         texture.flip(true,false);
         turret.setRotation(180);
     }
-
 
     @Override
     public void draw(Batch batch, float parentAlpha)
@@ -65,7 +70,6 @@ public class Tank extends Group
                     getX(), getY(), getOriginX(), getOriginY(),
                     getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation() );
         }
-
     }
 
     public void moveBy(int moveDirection)
@@ -88,5 +92,29 @@ public class Tank extends Group
     {
         Vector2 pos = turret.localToStageCoordinates(new Vector2(turret.getWidth()/2f, turret.getHeight()/2f));
         new StandardShell(stage,pos.x,pos.y, turret.getRotation(), 25 * acceleration);
+   }
+
+    public PowerBar getPowerBar()
+    {
+        return powerBar;
+    }
+    public int getHp()
+    {
+        return hp;
+    }
+
+    public void setHp(int hp)
+    {
+        this.hp = hp;
+    }
+
+    public String getPlayerName()
+    {
+        return playerName;
+    }
+
+    public void setPlayerName(String playerName)
+    {
+        this.playerName = playerName;
     }
 }

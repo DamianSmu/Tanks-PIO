@@ -1,20 +1,21 @@
 package com.pio.tanks;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
-import java.sql.Time;
 
 public class GameScreen implements Screen, InputProcessor
 {
     private Stage mainStage;
+    private Stage uiStage;
     private OrthographicCamera camera;
     private PlayerManager playerManager;
 
@@ -30,22 +31,45 @@ public class GameScreen implements Screen, InputProcessor
     /* Actors */
     private Background background;
 
-
-    /* Power */
-    private Texture power;
+    /* Labels */
+    private Label hpLabelA;
+    private Label hpLabelB;
+    private Label activeTankLabel;
+    private Table uiTable;
 
     public GameScreen()
     {
         camera = new OrthographicCamera();
-        mainStage = new Stage(new FitViewport(1000, 800, camera));
+        FitViewport viewport = new FitViewport(1000, 800, camera);
+        mainStage = new Stage(viewport);
+        uiStage = new Stage(viewport);
 
         playerManager = new PlayerManager(mainStage);
 
-       background = new Background(mainStage);
-       background.setPosition(0, 0);
-       background.toBack();
+        background = new Background(mainStage);
+        background.setPosition(0, 0);
+        background.toBack();
 
-       power = new Texture("power.png");
+        uiTable = new Table();
+        uiTable.setFillParent(true);
+        uiStage.addActor(uiTable);
+
+        hpLabelA = new Label("", TanksGameClass.labelStyle);
+        hpLabelA.setColor(Color.BLACK);
+        uiStage.addActor(hpLabelA);
+
+        hpLabelB = new Label("", TanksGameClass.labelStyle);
+        hpLabelB.setColor(Color.BLACK);
+        uiStage.addActor(hpLabelB);
+
+        activeTankLabel = new Label("", TanksGameClass.labelStyle);
+        activeTankLabel.setColor(Color.BLACK);
+        uiStage.addActor(activeTankLabel);
+
+        uiTable.pad(30);
+        uiTable.add(hpLabelA).top();
+        uiTable.add(activeTankLabel).expandX().expandY().top();
+        uiTable.add(hpLabelB).top();
     }
 
     @Override
@@ -54,29 +78,26 @@ public class GameScreen implements Screen, InputProcessor
         InputMultiplexer im = (InputMultiplexer) Gdx.input.getInputProcessor();
         im.addProcessor(this);
         im.addProcessor(mainStage);
-
     }
 
     @Override
     public void render(float delta)
     {
         mainStage.act();
+        uiStage.act();
         processInput();
+        setLabels();
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         mainStage.draw();
+        uiStage.draw();
 
         if(spacePressTimeStart > 0)
         {
-            mainStage.getBatch().begin();
-            int precent = Math.round((MathUtils.clamp(TimeUtils.millis() - spacePressTimeStart, 0, spacePressTimeMax)/(float)spacePressTimeMax) * 100);
-            TextureRegion powerRegion = new TextureRegion(power,precent , 20 );
-
-
-            mainStage.getBatch().draw(powerRegion, 100, 80);
-            mainStage.getBatch().end();
+            int percent = Math.round((MathUtils.clamp(TimeUtils.millis() - spacePressTimeStart, 0, spacePressTimeMax)/(float)spacePressTimeMax) * 100);
+            playerManager.getActiveTank().getPowerBar().setPowerLevel(percent);
         }
     }
 
@@ -131,7 +152,6 @@ public class GameScreen implements Screen, InputProcessor
                 spacePressTimeStart = TimeUtils.millis();
                 break;
         }
-
         return false;
     }
 
@@ -200,19 +220,29 @@ public class GameScreen implements Screen, InputProcessor
 
     private void processInput()
     {
+        Tank activeTank = playerManager.getActiveTank();
+
         if (keyLeftPressed)
-            playerManager.getActiveTank().moveBy(0);
+            activeTank.moveBy(0);
         if (keyRightPressed)
-            playerManager.getActiveTank().moveBy(1);
+            activeTank.moveBy(1);
         if (keyRotateTurretUpPressed)
-            playerManager.getActiveTank().rotateTurret(0);
+            activeTank.rotateTurret(0);
         if (keyRotateTurretDownPressed)
-            playerManager.getActiveTank().rotateTurret(1);
+            activeTank.rotateTurret(1);
         if(spacePressTimeEnd > 0.3f)
         {
-            playerManager.getActiveTank().shot(spacePressTimeEnd);
+            activeTank.shot(spacePressTimeEnd);
+            activeTank.getPowerBar().hide();
             spacePressTimeEnd = 0;
             playerManager.nextTurn();
         }
+    }
+
+    public void setLabels()
+    {
+        hpLabelA.setText("HP: " + playerManager.getTankA().getHp());
+        hpLabelB.setText("HP: " + playerManager.getTankB().getHp());
+        activeTankLabel.setText(playerManager.getActiveTank().getPlayerName());
     }
 }

@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 public abstract class AbstractShell extends Actor
 {
@@ -46,7 +45,6 @@ public abstract class AbstractShell extends Actor
         /* Gravity */
         accelerationVec.add(new Vector2(400, 0).setAngle(270) );
 
-
         velocityVec.add( accelerationVec.x * delta, accelerationVec.y * delta );
 
         float speed = velocityVec.len();
@@ -60,12 +58,13 @@ public abstract class AbstractShell extends Actor
 
         moveBy( velocityVec.x * delta, velocityVec.y * delta );
         rectangle.setPosition(getX(),getY());
-        if (rectangle.overlaps(PlayerManager.getActiveTank().rectangle)) {
+
+        /*if (rectangle.overlaps(PlayerManager.getActiveTank().rectangle)) {
             PlayerManager.getActiveTank().remove();
             this.remove();
-        }
-        accelerationVec.set(0,0);
+        }*/
 
+        accelerationVec.set(0,0);
 
         rotate();
     }
