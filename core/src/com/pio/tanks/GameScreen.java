@@ -4,8 +4,10 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -31,11 +33,13 @@ public class GameScreen implements Screen, InputProcessor
     /* Actors */
     private Background background;
 
-    /* Labels */
+    /* User interface */
     private Label hpLabelA;
     private Label hpLabelB;
     private Label activeTankLabel;
     private Table uiTable;
+    private Image ammoImage;
+    private Label ammoLabel;
 
     public GameScreen()
     {
@@ -56,20 +60,27 @@ public class GameScreen implements Screen, InputProcessor
 
         hpLabelA = new Label("", TanksGameClass.labelStyle);
         hpLabelA.setColor(Color.BLACK);
-        uiStage.addActor(hpLabelA);
 
         hpLabelB = new Label("", TanksGameClass.labelStyle);
         hpLabelB.setColor(Color.BLACK);
-        uiStage.addActor(hpLabelB);
 
         activeTankLabel = new Label("", TanksGameClass.labelStyle);
         activeTankLabel.setColor(Color.BLACK);
-        uiStage.addActor(activeTankLabel);
+
+        ammoImage = new Image(new Texture("tank_bullet3.png"));
+        ammoImage.rotateBy(45);
+        ammoImage.setOrigin(ammoImage.getWidth()/2, ammoImage.getHeight()/2);
+        ammoImage.scaleBy(-0.25f);
 
         uiTable.pad(30);
         uiTable.add(hpLabelA).top();
-        uiTable.add(activeTankLabel).expandX().expandY().top();
+        uiTable.add(activeTankLabel).expandX().top();
         uiTable.add(hpLabelB).top();
+        uiTable.row();
+        uiTable.add(ammoImage).expandY().top().left();
+
+
+        uiTable.setDebug(true);
     }
 
     @Override
@@ -93,12 +104,6 @@ public class GameScreen implements Screen, InputProcessor
 
         mainStage.draw();
         uiStage.draw();
-
-        if(spacePressTimeStart > 0)
-        {
-            int percent = Math.round((MathUtils.clamp(TimeUtils.millis() - spacePressTimeStart, 0, spacePressTimeMax)/(float)spacePressTimeMax) * 100);
-            playerManager.getActiveTank().getPowerBar().setPowerLevel(percent);
-        }
     }
 
     @Override
@@ -178,7 +183,6 @@ public class GameScreen implements Screen, InputProcessor
                 spacePressTimeStart = 0;
                 break;
         }
-
         return false;
     }
 
@@ -220,7 +224,7 @@ public class GameScreen implements Screen, InputProcessor
 
     private void processInput()
     {
-        Tank activeTank = playerManager.getActiveTank();
+        Tank activeTank = PlayerManager.getActiveTank();
 
         if (keyLeftPressed)
             activeTank.moveBy(0);
@@ -230,19 +234,29 @@ public class GameScreen implements Screen, InputProcessor
             activeTank.rotateTurret(0);
         if (keyRotateTurretDownPressed)
             activeTank.rotateTurret(1);
-        if(spacePressTimeEnd > 0.3f)
+
+        if (activeTank.isAbleToShoot())
         {
-            activeTank.shot(spacePressTimeEnd);
-            activeTank.getPowerBar().hide();
-            spacePressTimeEnd = 0;
-            playerManager.nextTurn();
+            if (spacePressTimeEnd > 0.3f)
+            {
+                activeTank.shot(spacePressTimeEnd);
+                activeTank.getPowerBar().hide();
+                spacePressTimeEnd = 0;
+                playerManager.setNextTurnTimer(3);
+            }
+            if (spacePressTimeStart > 0)
+            {
+                int percent = Math.round((MathUtils.clamp(TimeUtils.millis() - spacePressTimeStart, 0, spacePressTimeMax) / (float) spacePressTimeMax) * 100);
+                PlayerManager.getActiveTank().getPowerBar().setPowerLevel(percent);
+            }
         }
+        spacePressTimeEnd = 0;
     }
 
     public void setLabels()
     {
-        hpLabelA.setText("HP: " + playerManager.getTankA().getHp());
-        hpLabelB.setText("HP: " + playerManager.getTankB().getHp());
-        activeTankLabel.setText(playerManager.getActiveTank().getPlayerName());
+        hpLabelA.setText("HP: " + PlayerManager.getTankA().getHp());
+        hpLabelB.setText("HP: " + PlayerManager.getTankB().getHp());
+        activeTankLabel.setText(PlayerManager.getActiveTank().getPlayerName() + "\n" + playerManager.getTimerSeconds());
     }
 }

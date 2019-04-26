@@ -27,13 +27,13 @@ public abstract class AbstractShell extends Actor
 
         setPosition(posX, posY);
 
-        velocityVec = new Vector2(0,0);
+        velocityVec = new Vector2(0, 0);
         accelerationVec = new Vector2(0, 0);
         this.acceleration = acceleration;
-        maxSpeed = 10000;
+        maxSpeed = 1000;
         deceleration = 0;
 
-        accelerationVec.add(new Vector2(acceleration, 0).setAngle(angle) );
+        accelerationVec.add(new Vector2(acceleration, 0).setAngle(angle));
 
     }
 
@@ -43,9 +43,9 @@ public abstract class AbstractShell extends Actor
         super.act(delta);
 
         /* Gravity */
-        accelerationVec.add(new Vector2(400, 0).setAngle(270) );
+        accelerationVec.add(new Vector2(10, 0).setAngle(270));
 
-        velocityVec.add( accelerationVec.x * delta, accelerationVec.y * delta );
+        velocityVec.add(accelerationVec.x, accelerationVec.y);
 
         float speed = velocityVec.len();
 
@@ -56,16 +56,15 @@ public abstract class AbstractShell extends Actor
 
         setSpeed(speed);
 
-        moveBy( velocityVec.x * delta, velocityVec.y * delta );
-        rectangle.setPosition(getX(),getY());
+        moveBy(velocityVec.x * delta, velocityVec.y * delta);
+        rectangle.setPosition(getX(), getY());
 
         /*if (rectangle.overlaps(PlayerManager.getActiveTank().rectangle)) {
             PlayerManager.getActiveTank().remove();
             this.remove();
         }*/
 
-        accelerationVec.set(0,0);
-
+        accelerationVec.set(0, 0);
         rotate();
     }
 

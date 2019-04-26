@@ -9,6 +9,7 @@ public class PlayerManager
     private static Tank tankA;
     private static Tank tankB;
     private static Tank activeTank;
+    private int timer;
 
     public PlayerManager(Stage stage)
     {
@@ -17,19 +18,46 @@ public class PlayerManager
         tankB = new Tank(800, 100, stage, false);
         tankB.setPlayerName("Tank B");
         activeTank = tankA;
+
+        timer = 10;
+        nextTurnTimerStart();
     }
 
     public void nextTurn()
     {
-        Timer.schedule(new Timer.Task(){
+        if (activeTank.equals(tankA))
+            activeTank = tankB;
+        else
+            activeTank = tankA;
+
+        activeTank.ableToShoot();
+    }
+
+    public void setNextTurnTimer(int seconds)
+    {
+        timer = seconds;
+    }
+
+    private void nextTurnTimerStart()
+    {
+        Timer.schedule(new Timer.Task()
+        {
             @Override
-            public void run() {
-                if(activeTank.equals(tankA))
-                    activeTank = tankB;
-                else
-                    activeTank = tankA;
+            public void run()
+            {
+                timer--;
+                if (timer == 0)
+                {
+                    nextTurn();
+                    timer = 10;
+                }
             }
-        }, 3);
+        }, 1, 1);
+    }
+
+    public int getTimerSeconds()
+    {
+        return timer;
     }
 
     public static Tank getActiveTank()
