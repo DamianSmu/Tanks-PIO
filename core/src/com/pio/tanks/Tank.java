@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -18,10 +19,12 @@ public class Tank extends Group
     private Stage stage;
     private int hp;
     private int ammoType1;
+    private boolean changedToLeft;
     private String playerName;
     private boolean ableToShoot;
+    private AbstractShell firedShell;
 
-    public Tank(float posX, float posY, Stage stage, boolean isPositionedRight)
+    public Tank(float posX, float posY, Stage stage, boolean changedToLeft)
     {
         this.stage = stage;
         hp = 100;
@@ -42,18 +45,20 @@ public class Tank extends Group
         turret.setOrigin(0, turret.getHeight() / 2f);
         turret.toFront();
 
-        if (!isPositionedRight)
+        if (!changedToLeft)
             changeToLeft();
 
         powerBar = new PowerBar(stage);
         addActor(powerBar);
         powerBar.setPosition(-9, -20);
+        getDebug();
     }
 
     private void changeToLeft()
     {
         texture.flip(true, false);
         turret.setRotation(180);
+        changedToLeft = true;
     }
 
     @Override
@@ -83,16 +88,21 @@ public class Tank extends Group
 
     public void rotateTurret(int rotateDirection)
     {
-        if (rotateDirection == 0 /*&& turret.getRotation() <= 90f*/)
+        if (changedToLeft)
+            turret.setRotation(MathUtils.clamp(turret.getRotation(), 90, 180));
+        else
+            turret.setRotation(MathUtils.clamp(turret.getRotation(), 0, 90));
+
+        if (rotateDirection == 0)
             turret.rotateBy(2);
-        if (rotateDirection == 1 /*&& turret.getRotation() >= 0f*/)
+        if (rotateDirection == 1)
             turret.rotateBy(-2);
     }
 
     public void shot(float acceleration/* BulletType */)
     {
         Vector2 pos = turret.localToStageCoordinates(new Vector2(turret.getWidth() / 2f, turret.getHeight() / 2f));
-        new StandardShell(stage, pos.x, pos.y, turret.getRotation(), acceleration / 2f);
+        firedShell = new StandardShell(stage, pos.x, pos.y, turret.getRotation(), acceleration / 2f);
         ableToShoot = false;
         ammoType1--;
     }
@@ -130,5 +140,10 @@ public class Tank extends Group
     public boolean isAbleToShoot()
     {
         return ableToShoot;
+    }
+
+    public AbstractShell getFiredShell()
+    {
+        return firedShell;
     }
 }
