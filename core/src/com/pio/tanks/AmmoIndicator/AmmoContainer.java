@@ -49,5 +49,6 @@ public class AmmoContainer
     public void destroyOneShell()
     {
         source.get(source.size() - 1).destroy();
+        source.remove(source.size() - 1);
     }
 }
