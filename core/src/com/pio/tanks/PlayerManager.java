@@ -1,7 +1,10 @@
 package com.pio.tanks;
 
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Timer;
+import com.pio.tanks.AmmoIndicator.AmmoIndicatorController;
 
 public class PlayerManager
 {
@@ -11,6 +14,7 @@ public class PlayerManager
     private int timer;
     private Stage stage;
     private CameraActor camera;
+    private AmmoIndicatorController ammoController;
 
     public PlayerManager(Stage stage, CameraActor camera)
     {
@@ -35,6 +39,26 @@ public class PlayerManager
                 camera.followActor(activeTank);
             }
         }, 2);
+
+        tankA.addListener(event -> {
+
+            if (event instanceof ShotEvent)
+            {
+                ammoController.removeShell('A', ((ShotEvent) event).getShellType());
+                return true;
+            }
+            else return false;
+        });
+
+        tankB.addListener(event -> {
+
+            if (event instanceof ShotEvent)
+            {
+                ammoController.removeShell('B', ((ShotEvent) event).getShellType());
+                return true;
+            }
+            else return false;
+        });
     }
 
     public void nextTurn()
@@ -65,7 +89,7 @@ public class PlayerManager
                 if (timer == 0)
                 {
                     nextTurn();
-                    timer = 10;
+                    timer = 15;
                 }
             }
         }, 1, 1);
@@ -100,5 +124,8 @@ public class PlayerManager
         return tankB;
     }
 
-
+    public void setAmmoController(AmmoIndicatorController ammoController)
+    {
+        this.ammoController = ammoController;
+    }
 }

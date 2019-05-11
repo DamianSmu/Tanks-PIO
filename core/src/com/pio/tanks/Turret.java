@@ -1,7 +1,6 @@
 package com.pio.tanks;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -13,7 +12,7 @@ public class Turret extends Actor
 
     public Turret(Stage stage)
     {
-        texture = new TextureRegion(new Texture("tanks_turret1.png"));
+        texture = new TextureRegion(Assets.TURRET_TEX);
         setWidth(40);
         setHeight(12);
         stage.addActor(this);

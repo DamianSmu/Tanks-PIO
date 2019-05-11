@@ -1,7 +1,6 @@
 package com.pio.tanks;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -14,7 +13,7 @@ public class Background extends Actor
     public Background(Stage stage)
     {
         stage.addActor(this);
-        texture = new TextureRegion(new Texture("uncolored_hills.png"));
+        texture = new TextureRegion(Assets.BG_TEX);
         setSize(2048, 2048);
     }
 

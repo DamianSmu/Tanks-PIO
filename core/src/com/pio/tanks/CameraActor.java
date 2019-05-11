@@ -44,7 +44,7 @@ public class CameraActor extends Actor
     {
         centeredAtActor = false;
         followedActor = null;
-        addAction(Actions.moveTo(actor.getX() + actor.getWidth()/2f, actor.getY() + distAbove, 1.5f, Interpolation.smooth));
+        addAction(Actions.moveTo(actor.getX() + actor.getWidth()/2f, actor.getY() + distAbove, 1f, Interpolation.smooth));
         addAction(Actions.after(Actions.run(() -> centeredAtActor = true)));
     }
 

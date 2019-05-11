@@ -3,7 +3,6 @@ package com.pio.tanks;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -11,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.pio.tanks.AmmoIndicator.AmmoContainer;
+import com.pio.tanks.AmmoIndicator.AmmoIndicatorController;
 
 
 public class GameScreen implements Screen, InputProcessor
@@ -36,9 +37,8 @@ public class GameScreen implements Screen, InputProcessor
     private Label hpLabelA;
     private Label hpLabelB;
     private Label activeTankLabel;
+    private Label timerLabel;
     private Table uiTable;
-    private Image ammoImage;
-    private Label ammoLabel;
 
     public GameScreen()
     {
@@ -69,20 +69,20 @@ public class GameScreen implements Screen, InputProcessor
         activeTankLabel = new Label("", TanksGameClass.labelStyle);
         activeTankLabel.setColor(Color.BLACK);
 
-        ammoImage = new Image(new Texture("tank_bullet3.png"));
-        ammoImage.rotateBy(45);
-        ammoImage.setOrigin(ammoImage.getWidth() / 2, ammoImage.getHeight() / 2);
-        ammoImage.scaleBy(-0.25f);
+        timerLabel = new Label("", TanksGameClass.labelStyle);
+        timerLabel.setColor(Color.BLACK);
 
-        uiTable.pad(30);
-        uiTable.add(hpLabelA).top();
-        uiTable.add(activeTankLabel).expandX().top();
-        uiTable.add(hpLabelB).top();
+
+        uiTable.pad(25);
+        uiTable.add(hpLabelA).colspan(5).top();
+        uiTable.add(activeTankLabel).top().expandX();
+        uiTable.add(hpLabelB).top().colspan(5);
         uiTable.row();
-        uiTable.add(ammoImage).expandY().top().left();
+        playerManager.setAmmoController(new AmmoIndicatorController(uiTable));
+        uiTable.row();
+        uiTable.add(timerLabel).colspan(11).bottom().expandY();
 
-
-        // uiTable.setDebug(true);
+        //uiTable.setDebug(true);
     }
 
     @Override
@@ -261,6 +261,12 @@ public class GameScreen implements Screen, InputProcessor
     {
         hpLabelA.setText("HP: " + playerManager.getTankA().getHp());
         hpLabelB.setText("HP: " + playerManager.getTankB().getHp());
-        activeTankLabel.setText(playerManager.getActiveTank().getPlayerName() + "\n" + playerManager.getTimerSeconds());
+        activeTankLabel.setText(playerManager.getActiveTank().getPlayerName());
+        timerLabel.setText(playerManager.getTimerSeconds());
+    }
+
+    public void setAmmoIndicator(Table table)
+    {
+
     }
 }

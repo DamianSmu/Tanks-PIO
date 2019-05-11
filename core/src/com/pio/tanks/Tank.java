@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
@@ -18,6 +19,7 @@ public class Tank extends Group
     private PowerBar powerBar;
     private Stage stage;
     private int hp;
+    private int ammoType0;
     private int ammoType1;
     private boolean changedToLeft;
     private String playerName;
@@ -28,11 +30,12 @@ public class Tank extends Group
     {
         this.stage = stage;
         hp = 100;
-        ammoType1 = 3;
+        ammoType0 = 5;
+        ammoType1 = 5;
         ableToShoot = true;
 
         stage.addActor(this);
-        texture = new TextureRegion(new Texture("tanks_tankGreen_body1.png"));
+        texture = new TextureRegion(Assets.TANK_TEX);
         setPosition(posX, posY);
         setWidth(83);
         setHeight(49);
@@ -105,6 +108,7 @@ public class Tank extends Group
         firedShell = new StandardShell(stage, pos.x, pos.y, turret.getRotation(), acceleration / 2f);
         ableToShoot = false;
         ammoType1--;
+        fire(new ShotEvent(0));
     }
 
     public PowerBar getPowerBar()
@@ -146,4 +150,5 @@ public class Tank extends Group
     {
         return firedShell;
     }
+
 }
