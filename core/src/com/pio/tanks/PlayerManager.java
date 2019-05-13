@@ -34,9 +34,7 @@ public class PlayerManager
             public void run()
             {
                 nextTurnTimerStart();
-                camera.setDefaultZoom();
-                camera.moveToActor(activeTank);
-                camera.followActor(activeTank);
+                camera.moveToActor(activeTank,1f, 300);
             }
         }, 2);
 
@@ -45,6 +43,7 @@ public class PlayerManager
             if (event instanceof ShotEvent)
             {
                 ammoController.removeShell('A', ((ShotEvent) event).getShellType());
+                camera.setDefaultPosition(0.8f);
                 return true;
             }
             else return false;
@@ -55,6 +54,7 @@ public class PlayerManager
             if (event instanceof ShotEvent)
             {
                 ammoController.removeShell('B', ((ShotEvent) event).getShellType());
+                camera.setDefaultPosition(0.8f);
                 return true;
             }
             else return false;
@@ -69,12 +69,11 @@ public class PlayerManager
             activeTank = tankA;
 
         activeTank.ableToShoot();
-        camera.followActor(activeTank);
+        camera.moveToActor(getActiveTank(), 1f, 300);
     }
 
     public void setNextTurnTimer(int seconds)
     {
-        camera.moveToActor(getInactiveTank());
         timer = seconds;
     }
 

@@ -14,7 +14,7 @@ public class Background extends Actor
     {
         stage.addActor(this);
         texture = new TextureRegion(Assets.BG_TEX);
-        setSize(2048, 2048);
+        setSize(2200, 1700);
     }
 
     @Override

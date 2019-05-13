@@ -108,7 +108,7 @@ public class Tank extends Group
         firedShell = new StandardShell(stage, pos.x, pos.y, turret.getRotation(), acceleration / 2f);
         ableToShoot = false;
         ammoType1--;
-        fire(new ShotEvent(0));
+        fire(new ShotEvent(0, firedShell));
     }
 
     public PowerBar getPowerBar()

@@ -12,19 +12,12 @@ public class CameraActor extends Actor
 {
     private OrthographicCamera camera;
     private int distAbove;
-    private boolean centeredAtActor;
     private Actor followedActor;
 
     public CameraActor()
     {
         camera = new OrthographicCamera();
-        distAbove = 150;
-        centeredAtActor = true;
-        float posX = 500;
-        float posY = 300;
-        setScale(1.5f);
-        camera.position.set(posX, posY + distAbove, 0);
-        setPosition(posX, posY + distAbove);
+        setDefaultPosition(0);
         camera.update();
     }
 
@@ -32,30 +25,27 @@ public class CameraActor extends Actor
     public void act(float delta)
     {
         super.act(delta);
-        camera.position.set(getX(), getY() + distAbove,0);
-        if(centeredAtActor && followedActor != null)
-            setPosition(followedActor.getX() + followedActor.getWidth()/2f, followedActor.getY() + distAbove);
-        
-        camera.position.x = MathUtils.clamp(camera.position.x, 0, camera.viewportWidth);
+        camera.position.set(getX(), getY(), 0);
+        if (followedActor != null)
+            setPosition(followedActor.getX() + followedActor.getWidth() / 2f, followedActor.getY() + distAbove);
+
         camera.zoom = getScaleX();
+        camera.position.x = MathUtils.clamp(camera.position.x, 0, camera.viewportWidth);
     }
 
-    public void moveToActor(Actor actor)
+    public void moveToActor(Actor actor, float zoom, int distAbove)
     {
-        centeredAtActor = false;
+        this.distAbove = distAbove;
         followedActor = null;
-        addAction(Actions.moveTo(actor.getX() + actor.getWidth()/2f, actor.getY() + distAbove, 1f, Interpolation.smooth));
-        addAction(Actions.after(Actions.run(() -> centeredAtActor = true)));
+        setZoom(zoom);
+        addAction(Actions.moveTo(actor.getX() + actor.getWidth() / 2f, actor.getY() + distAbove, 1f, Interpolation.smooth2));
+        addAction(Actions.after(Actions.run(() -> followActor(actor, zoom, distAbove))));
     }
 
-    public void setCameraPosition(float x, float y, float zoom)
+    public void followActor(Actor actor, float zoom, int distAbove)
     {
-        camera.position.set(x, y, 0);
-        camera.zoom = zoom;
-        camera.update();
-    }
-    public void followActor(Actor actor)
-    {
+        this.distAbove = distAbove;
+        setZoom(zoom);
         followedActor = actor;
     }
 
@@ -69,8 +59,15 @@ public class CameraActor extends Actor
         stage.addActor(this);
     }
 
-    public void setDefaultZoom()
+    public void setZoom(float zoom)
     {
-        addAction(Actions.scaleTo(1f, 1f, 1f, Interpolation.smooth));
+        addAction(Actions.scaleTo(zoom, zoom, 1f, Interpolation.smooth2));
+    }
+
+    public void setDefaultPosition(float actionDuration)
+    {
+        followedActor = null;
+        addAction(Actions.moveTo(500, 600, actionDuration, Interpolation.smooth2));
+        addAction(Actions.scaleTo(1.5f, 1.5f, actionDuration, Interpolation.smooth2));
     }
 }
