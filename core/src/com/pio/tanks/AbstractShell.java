@@ -104,6 +104,8 @@ public abstract class AbstractShell extends Actor
                 if (Intersector.overlapConvexPolygons(getBoundaryPolygon(), tank.getBoundaryPolygon()))
                 {
                     tank.decreaseHp(20);
+                    Vector2 contactCoordinates = new Vector2(getWidth() * MathUtils.cosDeg(getRotation()), (getWidth() * MathUtils.sinDeg(getRotation()))).add(localToStageCoordinates(new Vector2(0, 0)));
+                    new BasicAnimation(stage, contactCoordinates.x, contactCoordinates.y, Assets.EXPL_TEX, 0.15f);
                     if (tank.getHp() <= 0)
                         tank.remove();
                     this.remove();

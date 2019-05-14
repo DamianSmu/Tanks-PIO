@@ -17,8 +17,13 @@ public class Assets
             new Texture("cloud4.png"), new Texture("cloud5.png"), new Texture("cloud6.png")};
     public static final Texture[] TREE_TEX = {new Texture("tree02.png"),
             new Texture("tree10.png"), new Texture("tree13.png"), new Texture("tree20.png")};
+    public static final Texture[] EXPL_TEX = {new Texture("tank_explosion2.png"),
+            new Texture("tank_explosion3.png"), new Texture("tank_explosion4.png")};
+    public static final Texture[] SHOT_TEX = {new Texture("tank_explosion10.png"),
+            new Texture("tank_explosion11.png"), new Texture("tank_explosion12.png"), new Texture("tank_explosion9.png")};
 
     public static final Label.LabelStyle FONT = loadFont();
+
     public static Label.LabelStyle loadFont()
     {
         FreeTypeFontGenerator fontGenerator =

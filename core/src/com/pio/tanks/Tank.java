@@ -1,14 +1,11 @@
 package com.pio.tanks;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
@@ -129,11 +126,17 @@ public class Tank extends Group
 
     public void shot(float acceleration/* BulletType */)
     {
-        Vector2 pos = turret.localToStageCoordinates(new Vector2(turret.getWidth() / 2f, turret.getHeight() / 2f));
-        firedShell = new StandardShell(stage, pos.x, pos.y, turret.getRotation(), acceleration / 2f);
+        Vector2 pos = new Vector2(turret.getWidth() * MathUtils.cosDeg(turret.getRotation()), (turret.getWidth() * MathUtils.sinDeg(turret.getRotation()))).add(turret.localToStageCoordinates(new Vector2(0,0)));
+        if(changedToLeft)
+            pos.y -= turret.getHeight()/2f;
+        else
+            pos.y += turret.getHeight()/2f;
+        firedShell = new StandardShell(stage, pos.x , pos.y, turret.getRotation(), acceleration / 2f);
         ableToShoot = false;
         ammoType1--;
         fire(new ShotEvent(0, firedShell));
+
+        new BasicAnimation(stage, pos.x, pos.y, Assets.SHOT_TEX, 0.10f);
     }
 
     public PowerBar getPowerBar()
