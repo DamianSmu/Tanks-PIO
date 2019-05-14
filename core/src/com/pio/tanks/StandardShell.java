@@ -13,7 +13,7 @@ public class StandardShell extends AbstractShell
         super(stage, posX, posY, angle, acceleration);
 
         texture = new TextureRegion(Assets.SHELL_TEX_0);
-        rectangle = new Rectangle(getX(),getY(),getWidth(),getHeight());
+
 
         addAction(Actions.sizeTo(38, 26, 0.2f));
 

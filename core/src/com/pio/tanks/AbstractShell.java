@@ -3,17 +3,17 @@ package com.pio.tanks;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public abstract class AbstractShell extends Actor
 {
     protected TextureRegion texture;
-    protected Rectangle rectangle;
+    //protected Rectangle rectangle;
+    private Polygon boundaryPolygon;
 
+    private Stage st;
     private Vector2 velocityVec;
     private Vector2 accelerationVec;
     private float acceleration;
@@ -22,6 +22,7 @@ public abstract class AbstractShell extends Actor
 
     public AbstractShell(Stage stage, float posX, float posY, float angle, float acceleration)
     {
+        st=stage;
         stage.addActor(this);
         this.toFront();
 
@@ -42,6 +43,9 @@ public abstract class AbstractShell extends Actor
     {
         super.act(delta);
 
+        if(getY()<=0)
+            remove();
+
         /* Gravity */
         accelerationVec.add(new Vector2(10, 0).setAngle(270));
 
@@ -57,15 +61,10 @@ public abstract class AbstractShell extends Actor
         setSpeed(speed);
 
         moveBy(velocityVec.x * delta, velocityVec.y * delta);
-        rectangle.setPosition(getX(), getY());
-
-        /*if (rectangle.overlaps(PlayerManager.getActiveTank().rectangle)) {
-            PlayerManager.getActiveTank().remove();
-            this.remove();
-        }*/
 
         accelerationVec.set(0, 0);
         rotate();
+        detectHit();
     }
 
 
@@ -88,6 +87,34 @@ public abstract class AbstractShell extends Actor
         setRotation(getMotionAngle());
     }
 
+    public void setBoundaryRectangle()
+    {
+        float w = getWidth();
+        float h = getHeight();
+        float[] vertices = {0,0, w,0, w,h, 0,h};
+        boundaryPolygon = new Polygon(vertices);
+    }
+
+    public Polygon getBoundaryPolygon()
+    {
+        boundaryPolygon.setPosition( getX(), getY() );
+        boundaryPolygon.setOrigin( getOriginX(), getOriginY() );
+        boundaryPolygon.setRotation ( getRotation() );
+        boundaryPolygon.setScale( getScaleX(), getScaleY() );
+        return boundaryPolygon;
+    }
+
+    private void detectHit (){
+        for (Actor actor : st.getActors())
+            if (actor instanceof Tank)
+                if ( Intersector.overlapConvexPolygons( this.getBoundaryPolygon(), ((Tank)actor).getBoundaryPolygon())){
+                    ((Tank)actor).setHp(((Tank)actor).getHp()-20);
+                    if ( ((Tank)actor).getHp()<=0)
+                        ((Tank)actor).remove();
+                    this.remove();
+                }
+    }
+
     @Override
     public void draw(Batch batch, float parentAlpha)
     {
@@ -100,5 +127,6 @@ public abstract class AbstractShell extends Actor
                     getX(), getY(), getOriginX(), getOriginY(),
                     getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
         }
+        setBoundaryRectangle();
     }
 }
