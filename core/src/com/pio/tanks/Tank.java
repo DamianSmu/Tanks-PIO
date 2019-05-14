@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Event;
@@ -13,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class Tank extends Group
 {
-    public Rectangle rectangle;
+    private Polygon boundaryPolygon;
     private TextureRegion texture;
     private Turret turret;
     private PowerBar powerBar;
@@ -39,8 +40,6 @@ public class Tank extends Group
         setPosition(posX, posY);
         setWidth(83);
         setHeight(49);
-
-        rectangle = new Rectangle(getX(), getY(), getWidth(), getHeight());
 
         turret = new Turret(stage);
         addActor(turret);
@@ -78,7 +77,44 @@ public class Tank extends Group
                     getX(), getY(), getOriginX(), getOriginY(),
                     getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
         }
+
+        setBoundaryRectangle();
+        setBoundaryPolygon(8);
     }
+
+    public void setBoundaryRectangle()
+    {
+        float w = getWidth();
+        float h = getHeight();
+        float[] vertices = {0,0, w,0, w,h, 0,h};
+        boundaryPolygon = new Polygon(vertices);
+    }
+
+    public void setBoundaryPolygon(int numSides)
+    {
+        float w = getWidth();
+        float h = getHeight();
+        float[] vertices = new float[2*numSides];
+        for (int i = 0; i < numSides; i++)
+        {
+            float angle = i * 6.28f / numSides;
+// x-coordinate
+            vertices[2*i] = w/2 * MathUtils.cos(angle) + w/2;
+// y-coordinate
+            vertices[2*i+1] = h/2 * MathUtils.sin(angle) + h/2;
+        }
+        boundaryPolygon = new Polygon(vertices);
+    }
+
+    public Polygon getBoundaryPolygon()
+    {
+        boundaryPolygon.setPosition( getX(), getY() );
+        boundaryPolygon.setOrigin( getOriginX(), getOriginY() );
+        boundaryPolygon.setRotation ( getRotation() );
+        boundaryPolygon.setScale( getScaleX(), getScaleY() );
+        return boundaryPolygon;
+    }
+
 
     public void moveBy(int moveDirection)
     {
@@ -86,7 +122,6 @@ public class Tank extends Group
             moveBy(-2, 0);
         if (moveDirection == 1)
             moveBy(2, 0);
-        rectangle.setPosition(getX(), getY());
     }
 
     public void rotateTurret(int rotateDirection)
