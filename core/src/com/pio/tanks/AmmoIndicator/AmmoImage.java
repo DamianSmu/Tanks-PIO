@@ -29,7 +29,6 @@ public class AmmoImage extends Image
     public void destroy()
     {
         addAction(Actions.scaleTo(0, 0, 0.5f, Interpolation.circleOut));
-        addAction(Actions.after(Actions.alpha(0)));
         addAction(Actions.after(Actions.removeActor()));
     }
 

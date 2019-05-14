@@ -13,7 +13,7 @@ public abstract class AbstractShell extends Actor
     //protected Rectangle rectangle;
     private Polygon boundaryPolygon;
 
-    private Stage st;
+    private Stage stage;
     private Vector2 velocityVec;
     private Vector2 accelerationVec;
     private float acceleration;
@@ -22,7 +22,7 @@ public abstract class AbstractShell extends Actor
 
     public AbstractShell(Stage stage, float posX, float posY, float angle, float acceleration)
     {
-        st=stage;
+        this.stage = stage;
         stage.addActor(this);
         this.toFront();
 
@@ -36,6 +36,7 @@ public abstract class AbstractShell extends Actor
 
         accelerationVec.add(new Vector2(acceleration, 0).setAngle(angle));
 
+        setBoundaryPolygon();
     }
 
     @Override
@@ -43,7 +44,7 @@ public abstract class AbstractShell extends Actor
     {
         super.act(delta);
 
-        if(getY()<=0)
+        if (getY() <= 0)
             remove();
 
         /* Gravity */
@@ -63,7 +64,8 @@ public abstract class AbstractShell extends Actor
         moveBy(velocityVec.x * delta, velocityVec.y * delta);
 
         accelerationVec.set(0, 0);
-        rotate();
+        setRotation(velocityVec.angle());
+
         detectHit();
     }
 
@@ -76,43 +78,37 @@ public abstract class AbstractShell extends Actor
             velocityVec.setLength(speed);
     }
 
-
-    public float getMotionAngle()
-    {
-        return velocityVec.angle();
-    }
-
-    private void rotate()
-    {
-        setRotation(getMotionAngle());
-    }
-
-    public void setBoundaryRectangle()
+    public void setBoundaryPolygon()
     {
         float w = getWidth();
         float h = getHeight();
-        float[] vertices = {0,0, w,0, w,h, 0,h};
+        float[] vertices = {0, 0, w, 0, w, h, 0, h};
         boundaryPolygon = new Polygon(vertices);
     }
 
     public Polygon getBoundaryPolygon()
     {
-        boundaryPolygon.setPosition( getX(), getY() );
-        boundaryPolygon.setOrigin( getOriginX(), getOriginY() );
-        boundaryPolygon.setRotation ( getRotation() );
-        boundaryPolygon.setScale( getScaleX(), getScaleY() );
+        boundaryPolygon.setPosition(getX(), getY());
+        boundaryPolygon.setOrigin(getOriginX(), getOriginY());
+        boundaryPolygon.setRotation(getRotation());
+        boundaryPolygon.setScale(getScaleX(), getScaleY());
         return boundaryPolygon;
     }
 
-    private void detectHit (){
-        for (Actor actor : st.getActors())
+    private void detectHit()
+    {
+        for (Actor actor : stage.getActors())
             if (actor instanceof Tank)
-                if ( Intersector.overlapConvexPolygons( this.getBoundaryPolygon(), ((Tank)actor).getBoundaryPolygon())){
-                    ((Tank)actor).setHp(((Tank)actor).getHp()-20);
-                    if ( ((Tank)actor).getHp()<=0)
-                        ((Tank)actor).remove();
+            {
+                Tank tank = (Tank) actor;
+                if (Intersector.overlapConvexPolygons(getBoundaryPolygon(), tank.getBoundaryPolygon()))
+                {
+                    tank.decreaseHp(20);
+                    if (tank.getHp() <= 0)
+                        tank.remove();
                     this.remove();
                 }
+            }
     }
 
     @Override
@@ -127,6 +123,5 @@ public abstract class AbstractShell extends Actor
                     getX(), getY(), getOriginX(), getOriginY(),
                     getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
         }
-        setBoundaryRectangle();
     }
 }

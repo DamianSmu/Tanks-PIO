@@ -1,8 +1,6 @@
 package com.pio.tanks;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
@@ -14,10 +12,10 @@ public class StandardShell extends AbstractShell
 
         texture = new TextureRegion(Assets.SHELL_TEX_0);
 
-
         addAction(Actions.sizeTo(38, 26, 0.2f));
 
         getColor().a = 0;
         addAction(Actions.fadeIn(0.2f));
+        addAction(Actions.after(Actions.run(this::setBoundaryPolygon)));
     }
 }

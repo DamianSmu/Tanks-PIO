@@ -52,6 +52,7 @@ public class GameScreen implements Screen, InputProcessor
 
 
         playerManager = new PlayerManager(mainStage, cameraActor);
+        cloudManager = new CloudManager(mainStage);
 
         background = new Background(mainStage);
         background.setPosition(-500, -300);
@@ -61,16 +62,16 @@ public class GameScreen implements Screen, InputProcessor
         uiTable.setFillParent(true);
         uiStage.addActor(uiTable);
 
-        hpLabelA = new Label("", TanksGameClass.labelStyle);
+        hpLabelA = new Label("", Assets.FONT);
         hpLabelA.setColor(Color.BLACK);
 
-        hpLabelB = new Label("", TanksGameClass.labelStyle);
+        hpLabelB = new Label("", Assets.FONT);
         hpLabelB.setColor(Color.BLACK);
 
-        activeTankLabel = new Label("", TanksGameClass.labelStyle);
+        activeTankLabel = new Label("", Assets.FONT);
         activeTankLabel.setColor(Color.BLACK);
 
-        timerLabel = new Label("", TanksGameClass.labelStyle);
+        timerLabel = new Label("", Assets.FONT);
         timerLabel.setColor(Color.BLACK);
 
 
@@ -84,8 +85,6 @@ public class GameScreen implements Screen, InputProcessor
         uiTable.add(timerLabel).colspan(11).bottom().expandY();
 
         //uiTable.setDebug(true);
-
-        cloudManager = new CloudManager(mainStage);
     }
 
     @Override
@@ -110,8 +109,6 @@ public class GameScreen implements Screen, InputProcessor
 
         mainStage.draw();
         uiStage.draw();
-
-        cloudManager.act();
     }
 
     @Override
@@ -268,10 +265,5 @@ public class GameScreen implements Screen, InputProcessor
         hpLabelB.setText("HP: " + playerManager.getTankB().getHp());
         activeTankLabel.setText(playerManager.getActiveTank().getPlayerName());
         timerLabel.setText(playerManager.getTimerSeconds());
-    }
-
-    public void setAmmoIndicator(Table table)
-    {
-
     }
 }

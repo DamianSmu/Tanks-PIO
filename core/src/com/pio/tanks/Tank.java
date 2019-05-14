@@ -54,6 +54,8 @@ public class Tank extends Group
         addActor(powerBar);
         powerBar.setPosition(-9, -20);
         getDebug();
+
+        setBoundaryPolygon(8);
     }
 
     private void changeToLeft()
@@ -77,44 +79,32 @@ public class Tank extends Group
                     getX(), getY(), getOriginX(), getOriginY(),
                     getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
         }
-
-        setBoundaryRectangle();
-        setBoundaryPolygon(8);
     }
 
-    public void setBoundaryRectangle()
+    public Polygon getBoundaryPolygon()
     {
-        float w = getWidth();
-        float h = getHeight();
-        float[] vertices = {0,0, w,0, w,h, 0,h};
-        boundaryPolygon = new Polygon(vertices);
+        boundaryPolygon.setPosition(getX(), getY());
+        boundaryPolygon.setOrigin(getOriginX(), getOriginY());
+        boundaryPolygon.setRotation(getRotation());
+        boundaryPolygon.setScale(getScaleX(), getScaleY());
+        return boundaryPolygon;
     }
 
     public void setBoundaryPolygon(int numSides)
     {
         float w = getWidth();
         float h = getHeight();
-        float[] vertices = new float[2*numSides];
+        float[] vertices = new float[2 * numSides];
         for (int i = 0; i < numSides; i++)
         {
             float angle = i * 6.28f / numSides;
-// x-coordinate
-            vertices[2*i] = w/2 * MathUtils.cos(angle) + w/2;
-// y-coordinate
-            vertices[2*i+1] = h/2 * MathUtils.sin(angle) + h/2;
+
+            vertices[2 * i] = w / 2 * MathUtils.cos(angle) + w / 2;
+
+            vertices[2 * i + 1] = h / 2 * MathUtils.sin(angle) + h / 2;
         }
         boundaryPolygon = new Polygon(vertices);
     }
-
-    public Polygon getBoundaryPolygon()
-    {
-        boundaryPolygon.setPosition( getX(), getY() );
-        boundaryPolygon.setOrigin( getOriginX(), getOriginY() );
-        boundaryPolygon.setRotation ( getRotation() );
-        boundaryPolygon.setScale( getScaleX(), getScaleY() );
-        return boundaryPolygon;
-    }
-
 
     public void moveBy(int moveDirection)
     {
@@ -159,6 +149,11 @@ public class Tank extends Group
     public void setHp(int hp)
     {
         this.hp = hp;
+    }
+
+    public void decreaseHp (int value)
+    {
+        hp -= value;
     }
 
     public String getPlayerName()
