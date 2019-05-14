@@ -8,6 +8,8 @@ import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.pio.tanks.Animations.ShotAnimation;
+import com.pio.tanks.Events.ShotEvent;
 
 public class Tank extends Group
 {
@@ -136,7 +138,7 @@ public class Tank extends Group
         ammoType1--;
         fire(new ShotEvent(0, firedShell));
 
-        new BasicAnimation(stage, pos.x, pos.y, Assets.SHOT_TEX, 0.10f);
+        new ShotAnimation(stage, pos.x, pos.y);
     }
 
     public PowerBar getPowerBar()

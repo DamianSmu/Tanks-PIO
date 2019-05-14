@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.pio.tanks.Animations.ExplosionAnimation;
+import com.pio.tanks.Events.HitDetectedEvent;
 
 public abstract class AbstractShell extends Actor
 {
@@ -105,7 +107,9 @@ public abstract class AbstractShell extends Actor
                 {
                     tank.decreaseHp(20);
                     Vector2 contactCoordinates = new Vector2(getWidth() * MathUtils.cosDeg(getRotation()), (getWidth() * MathUtils.sinDeg(getRotation()))).add(localToStageCoordinates(new Vector2(0, 0)));
-                    new BasicAnimation(stage, contactCoordinates.x, contactCoordinates.y, Assets.EXPL_TEX, 0.15f);
+                    new ExplosionAnimation(stage, contactCoordinates.x, contactCoordinates.y);
+
+                    tank.fire(new HitDetectedEvent(tank));
                     if (tank.getHp() <= 0)
                         tank.remove();
                     this.remove();

@@ -1,10 +1,11 @@
-package com.pio.tanks;
+package com.pio.tanks.BackgroundActors;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.pio.tanks.Assets;
 
 import java.util.Random;
 

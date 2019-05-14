@@ -1,10 +1,9 @@
 package com.pio.tanks;
 
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Timer;
 import com.pio.tanks.AmmoIndicator.AmmoIndicatorController;
+import com.pio.tanks.Events.ShotEvent;
 
 public class PlayerManager
 {
@@ -26,7 +25,7 @@ public class PlayerManager
         tankB.setPlayerName("Tank B");
         activeTank = tankA;
 
-        timer = 15;
+        timer = 30;
 
         Timer.schedule(new Timer.Task()
         {
@@ -88,7 +87,7 @@ public class PlayerManager
                 if (timer == 0)
                 {
                     nextTurn();
-                    timer = 15;
+                    timer = 30;
                 }
             }
         }, 1, 1);

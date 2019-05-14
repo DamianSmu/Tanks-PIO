@@ -1,6 +1,10 @@
 package com.pio.tanks;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.pio.tanks.BackgroundActors.Background;
+import com.pio.tanks.BackgroundActors.Cloud;
+import com.pio.tanks.BackgroundActors.Tree;
+
 import java.util.ArrayList;
 
 public class BackgroundManager
@@ -24,7 +28,7 @@ public class BackgroundManager
             trees.add(new Tree(stage, (int)(posX - 30), (int)(posX + 30)));
 
         background = new Background(stage);
-        background.setPosition(-500, -300);
+        background.setPosition(-800, -300);
         background.toBack();
     }
 

@@ -30,7 +30,13 @@ public class CameraActor extends Actor
             setPosition(followedActor.getX() + followedActor.getWidth() / 2f, followedActor.getY() + distAbove);
 
         camera.zoom = getScaleX();
-        camera.position.x = MathUtils.clamp(camera.position.x, 0, camera.viewportWidth);
+
+        if (followedActor != null)
+        {
+            float boundedX = MathUtils.clamp(camera.position.x, 0, camera.viewportWidth);
+            camera.position.x = boundedX;
+            setX(boundedX);
+        }
     }
 
     public void moveToActor(Actor actor, float zoom, int distAbove)
@@ -38,7 +44,8 @@ public class CameraActor extends Actor
         this.distAbove = distAbove;
         followedActor = null;
         setZoom(zoom);
-        addAction(Actions.moveTo(actor.getX() + actor.getWidth() / 2f, actor.getY() + distAbove, 1f, Interpolation.smooth2));
+        float posX = MathUtils.clamp(actor.getX() + actor.getWidth() / 2f, 0, camera.viewportWidth);
+        addAction(Actions.moveTo(posX, actor.getY() + distAbove, 1f, Interpolation.smooth2));
         addAction(Actions.after(Actions.run(() -> followActor(actor, zoom, distAbove))));
     }
 
@@ -68,6 +75,6 @@ public class CameraActor extends Actor
     {
         followedActor = null;
         addAction(Actions.moveTo(500, 600, actionDuration, Interpolation.smooth2));
-        addAction(Actions.scaleTo(1.5f, 1.5f, actionDuration, Interpolation.smooth2));
+        addAction(Actions.scaleTo(1.7f, 1.7f, actionDuration, Interpolation.smooth2));
     }
 }

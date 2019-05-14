@@ -1,6 +1,7 @@
-package com.pio.tanks;
+package com.pio.tanks.Events;
 
 import com.badlogic.gdx.scenes.scene2d.Event;
+import com.pio.tanks.AbstractShell;
 
 public class ShotEvent extends Event
 {
