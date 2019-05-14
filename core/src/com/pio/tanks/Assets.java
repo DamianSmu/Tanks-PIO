@@ -9,4 +9,6 @@ public class Assets
     public static final Texture TANK_TEX = new Texture("tanks_tankGreen_body1.png");
     public static final Texture TURRET_TEX = new Texture("tanks_turret1.png");
     public static final Texture BG_TEX = new Texture("uncolored_hills.png");
+    public static final Texture CLOUD_TEX[] = {new Texture("cloud1.png"),
+            new Texture("cloud4.png"), new Texture("cloud5.png"), new Texture("cloud6.png")};
 }

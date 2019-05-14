@@ -20,6 +20,7 @@ public class GameScreen implements Screen, InputProcessor
     private Stage uiStage;
     private CameraActor cameraActor;
     private PlayerManager playerManager;
+    private CloudManager cloudManager;
 
     /* Pressed keys */
     private boolean keyLeftPressed = false;
@@ -53,7 +54,7 @@ public class GameScreen implements Screen, InputProcessor
         playerManager = new PlayerManager(mainStage, cameraActor);
 
         background = new Background(mainStage);
-        background.setPosition(-500, 0);
+        background.setPosition(-500, -300);
         background.toBack();
 
         uiTable = new Table();
@@ -83,6 +84,8 @@ public class GameScreen implements Screen, InputProcessor
         uiTable.add(timerLabel).colspan(11).bottom().expandY();
 
         //uiTable.setDebug(true);
+
+        cloudManager = new CloudManager(mainStage);
     }
 
     @Override
@@ -107,6 +110,8 @@ public class GameScreen implements Screen, InputProcessor
 
         mainStage.draw();
         uiStage.draw();
+
+        cloudManager.act();
     }
 
     @Override
