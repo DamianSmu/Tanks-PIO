@@ -24,7 +24,7 @@ public abstract class AbstractShell extends Actor
     {
         this.stage = stage;
         stage.addActor(this);
-        this.toFront();
+        this.setZIndex(1);
 
         setPosition(posX, posY);
 

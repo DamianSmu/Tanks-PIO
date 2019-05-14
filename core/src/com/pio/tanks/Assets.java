@@ -12,9 +12,11 @@ public class Assets
     public static final Texture SHELL_TEX_1 = new Texture("tank_bullet4.png");
     public static final Texture TANK_TEX = new Texture("tanks_tankGreen_body1.png");
     public static final Texture TURRET_TEX = new Texture("tanks_turret1.png");
-    public static final Texture BG_TEX = new Texture("uncolored_hills.png");
+    public static final Texture BG_TEX = new Texture("background.png");
     public static final Texture[] CLOUD_TEX = {new Texture("cloud1.png"),
             new Texture("cloud4.png"), new Texture("cloud5.png"), new Texture("cloud6.png")};
+    public static final Texture[] TREE_TEX = {new Texture("tree02.png"),
+            new Texture("tree10.png"), new Texture("tree13.png"), new Texture("tree20.png")};
 
     public static final Label.LabelStyle FONT = loadFont();
     public static Label.LabelStyle loadFont()

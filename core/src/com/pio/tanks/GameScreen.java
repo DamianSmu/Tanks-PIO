@@ -5,12 +5,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.pio.tanks.AmmoIndicator.AmmoContainer;
 import com.pio.tanks.AmmoIndicator.AmmoIndicatorController;
 
 
@@ -20,7 +18,7 @@ public class GameScreen implements Screen, InputProcessor
     private Stage uiStage;
     private CameraActor cameraActor;
     private PlayerManager playerManager;
-    private CloudManager cloudManager;
+    private BackgroundManager backgroundManager;
 
     /* Pressed keys */
     private boolean keyLeftPressed = false;
@@ -31,8 +29,6 @@ public class GameScreen implements Screen, InputProcessor
     private long spacePressTimeEnd;
     private int spacePressTimeMax = 3000;
 
-    /* Actors */
-    private Background background;
 
     /* User interface */
     private Label hpLabelA;
@@ -52,11 +48,8 @@ public class GameScreen implements Screen, InputProcessor
 
 
         playerManager = new PlayerManager(mainStage, cameraActor);
-        cloudManager = new CloudManager(mainStage);
+        backgroundManager = new BackgroundManager(mainStage);
 
-        background = new Background(mainStage);
-        background.setPosition(-500, -300);
-        background.toBack();
 
         uiTable = new Table();
         uiTable.setFillParent(true);

@@ -14,17 +14,17 @@ public class Cloud extends Actor
     private TextureRegion texture;
     private float speed;
 
-    public Cloud(Stage stage, int lowerBoundary, int upperBoundary)
+    public Cloud(Stage stage, int lowerXBoundary, int upperXBoundary)
     {
         Random random = new Random();
         stage.addActor(this);
-        texture = new TextureRegion(Assets.CLOUD_TEX[random.nextInt(4)]);
+        texture = new TextureRegion(Assets.CLOUD_TEX[random.nextInt(Assets.CLOUD_TEX.length)]);
         speed =  (random.nextFloat() / 5f) + 0.01f;
         if (random.nextBoolean())
             speed *= -1f;
         setSize(228, 124);
 
-        setPosition(random.nextFloat() * (upperBoundary - lowerBoundary) + lowerBoundary, 400 + random.nextInt(300));
+        setPosition(random.nextFloat() * (upperXBoundary - lowerXBoundary) + lowerXBoundary, 400 + random.nextInt(300));
         toFront();
     }
 
