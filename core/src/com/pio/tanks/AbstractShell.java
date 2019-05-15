@@ -7,6 +7,8 @@ import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.pio.tanks.Animations.ExplosionAnimation;
+import com.pio.tanks.BackgroundActors.Tower;
+import com.pio.tanks.BackgroundActors.Tree;
 import com.pio.tanks.Events.HitDetectedEvent;
 
 public abstract class AbstractShell extends Actor
@@ -99,12 +101,10 @@ public abstract class AbstractShell extends Actor
 
     private void detectHit()
     {
-        for (Actor actor : stage.getActors())
-            if (actor instanceof Tank)
-            {
+        for (Actor actor : stage.getActors()) {
+            if (actor instanceof Tank) {
                 Tank tank = (Tank) actor;
-                if (Intersector.overlapConvexPolygons(getBoundaryPolygon(), tank.getBoundaryPolygon()))
-                {
+                if (Intersector.overlapConvexPolygons(getBoundaryPolygon(), tank.getBoundaryPolygon())) {
                     tank.decreaseHp(20);
                     Vector2 contactCoordinates = new Vector2(getWidth() * MathUtils.cosDeg(getRotation()), (getWidth() * MathUtils.sinDeg(getRotation()))).add(localToStageCoordinates(new Vector2(0, 0)));
                     new ExplosionAnimation(stage, contactCoordinates.x, contactCoordinates.y);
@@ -115,6 +115,23 @@ public abstract class AbstractShell extends Actor
                     this.remove();
                 }
             }
+            else if (actor instanceof Tree){
+                Tree tree = (Tree) actor;
+                if (Intersector.overlapConvexPolygons(getBoundaryPolygon(), tree.getBoundaryPolygon())) {
+                    Vector2 contactCoordinates = new Vector2(getWidth() * MathUtils.cosDeg(getRotation()), (getWidth() * MathUtils.sinDeg(getRotation()))).add(localToStageCoordinates(new Vector2(0, 0)));
+                    new ExplosionAnimation(stage, contactCoordinates.x, contactCoordinates.y);
+                    this.remove();
+                }
+            }
+            else if (actor instanceof Tower){
+                Tower tower = (Tower) actor;
+                if (Intersector.overlapConvexPolygons(getBoundaryPolygon(), tower.getBoundaryPolygon())) {
+                    Vector2 contactCoordinates = new Vector2(getWidth() * MathUtils.cosDeg(getRotation()), (getWidth() * MathUtils.sinDeg(getRotation()))).add(localToStageCoordinates(new Vector2(0, 0)));
+                    new ExplosionAnimation(stage, contactCoordinates.x, contactCoordinates.y);
+                    this.remove();
+                }
+            }
+        }
     }
 
     @Override

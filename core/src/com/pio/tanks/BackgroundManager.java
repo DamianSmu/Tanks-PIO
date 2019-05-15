@@ -3,6 +3,7 @@ package com.pio.tanks;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.pio.tanks.BackgroundActors.Background;
 import com.pio.tanks.BackgroundActors.Cloud;
+import com.pio.tanks.BackgroundActors.Tower;
 import com.pio.tanks.BackgroundActors.Tree;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ public class BackgroundManager
 {
 
     private Background background;
+    private Tower tower;
     private final int CLOUDS_NUMBER = 15;
     private final int TREES_NUMBER = 15;
     ArrayList<Cloud> clouds;
@@ -20,6 +22,7 @@ public class BackgroundManager
     {
         clouds = new ArrayList<>();
         trees = new ArrayList<>();
+        tower = new Tower(stage);
 
         for (int i = 0; i < CLOUDS_NUMBER; i++)
             clouds.add(new Cloud(stage, -500, 1800));

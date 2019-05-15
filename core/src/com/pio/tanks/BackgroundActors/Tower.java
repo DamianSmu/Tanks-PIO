@@ -11,26 +11,18 @@ import com.pio.tanks.Assets;
 
 import java.util.Random;
 
-public class Tree extends Actor
+public class Tower extends Actor
 {
     private Polygon boundaryPolygon;
     private TextureRegion texture;
-    private Random random;
 
-    public Tree(Stage stage, int lowerXBoundary, int upperXBoundary)
+    public Tower(Stage stage)
     {
-        random = new Random();
         stage.addActor(this);
-        texture = new TextureRegion(Assets.TREE_TEX[random.nextInt(Assets.TREE_TEX.length)]);
-        setSize(68, 146);
+        texture = new TextureRegion(Assets.TOWER_TEX);
+        setSize(66, 227);
 
-        setPosition((int)(random.nextDouble() * (upperXBoundary - lowerXBoundary) + lowerXBoundary), random.nextInt(80) + 60);
-        setScale(1.8f - getY()/120);
-
-        if(getY() < 105)
-            toFront();
-        else
-            toBack();
+        setPosition(500, 100);
         setBoundaryPolygon(8);
     }
 

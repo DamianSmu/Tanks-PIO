@@ -21,6 +21,7 @@ public class Assets
             new Texture("tank_explosion3.png"), new Texture("tank_explosion4.png")};
     public static final Texture[] SHOT_TEX = {new Texture("tank_explosion10.png"),
             new Texture("tank_explosion11.png"), new Texture("tank_explosion12.png"), new Texture("tank_explosion9.png")};
+    public static final Texture TOWER_TEX = new Texture("tower_grey.png");
 
     public static final Label.LabelStyle FONT = loadFont();
 
