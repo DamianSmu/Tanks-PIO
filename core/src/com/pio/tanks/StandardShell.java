@@ -12,10 +12,10 @@ public class StandardShell extends AbstractShell
 
         texture = new TextureRegion(Assets.SHELL_TEX_0);
 
-        addAction(Actions.sizeTo(38, 26, 0.2f));
+        setSize(38,26);
+        setBoundaryPolygon();
 
         getColor().a = 0;
-        addAction(Actions.fadeIn(0.2f));
-        addAction(Actions.after(Actions.run(this::setBoundaryPolygon)));
+        addAction(Actions.fadeIn(0.1f));
     }
 }

@@ -35,6 +35,7 @@ public class Tank extends Group
         hp = 100;
         ammoType0 = 5;
         ammoType1 = 5;
+
         ableToShoot = true;
 
         stage.addActor(this);
@@ -56,6 +57,7 @@ public class Tank extends Group
         addActor(powerBar);
         powerBar.setPosition(-9, -20);
         getDebug();
+
 
         setBoundaryPolygon(8);
     }

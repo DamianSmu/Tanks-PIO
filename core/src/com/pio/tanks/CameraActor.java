@@ -25,18 +25,27 @@ public class CameraActor extends Actor
     public void act(float delta)
     {
         super.act(delta);
-        camera.position.set(getX(), getY(), 0);
-        if (followedActor != null)
-            setPosition(followedActor.getX() + followedActor.getWidth() / 2f, followedActor.getY() + distAbove);
-
-        camera.zoom = getScaleX();
-
+        /*camera.position.set(getX(), getY(), 0);
         if (followedActor != null)
         {
+            setPosition(followedActor.getX() + followedActor.getWidth() / 2f, followedActor.getY() + distAbove);
+
+
             float boundedX = MathUtils.clamp(camera.position.x, 0, camera.viewportWidth);
             camera.position.x = boundedX;
             setX(boundedX);
+        }*/
+        camera.position.set(getX(), getY(), 0);
+
+        if(followedActor != null)
+        {
+            float boundedX = MathUtils.clamp(followedActor.getX() + followedActor.getWidth() / 2f, 0, camera.viewportWidth);
+            camera.position.x = boundedX;
+            setX(boundedX);
         }
+
+
+        camera.zoom = getScaleX();
     }
 
     public void moveToActor(Actor actor, float zoom, int distAbove)

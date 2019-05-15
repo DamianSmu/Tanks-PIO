@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.pio.tanks.AmmoIndicator.AmmoIndicatorController;
 
 
-public class GameScreen implements Screen, InputProcessor
+public class GameScreen extends InputProcessorAdapter implements Screen
 {
     private Stage mainStage;
     private Stage uiStage;
@@ -56,16 +56,15 @@ public class GameScreen implements Screen, InputProcessor
         uiStage.addActor(uiTable);
 
         hpLabelA = new Label("", Assets.FONT);
-        hpLabelA.setColor(Color.BLACK);
+
 
         hpLabelB = new Label("", Assets.FONT);
-        hpLabelB.setColor(Color.BLACK);
+
 
         activeTankLabel = new Label("", Assets.FONT);
-        activeTankLabel.setColor(Color.BLACK);
+
 
         timerLabel = new Label("", Assets.FONT);
-        timerLabel.setColor(Color.BLACK);
 
 
         uiTable.pad(25);
@@ -181,42 +180,6 @@ public class GameScreen implements Screen, InputProcessor
                 spacePressTimeStart = 0;
                 break;
         }
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char character)
-    {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button)
-    {
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button)
-    {
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer)
-    {
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY)
-    {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(int amount)
-    {
         return false;
     }
 

@@ -14,9 +14,7 @@ import com.pio.tanks.Events.HitDetectedEvent;
 public abstract class AbstractShell extends Actor
 {
     protected TextureRegion texture;
-    //protected Rectangle rectangle;
     private Polygon boundaryPolygon;
-
     private Stage stage;
     private Vector2 velocityVec;
     private Vector2 accelerationVec;
@@ -28,7 +26,7 @@ public abstract class AbstractShell extends Actor
     {
         this.stage = stage;
         stage.addActor(this);
-        this.setZIndex(1);
+        setZIndex(1);
 
         setPosition(posX, posY);
 
@@ -48,7 +46,7 @@ public abstract class AbstractShell extends Actor
     {
         super.act(delta);
 
-        if (getY() <= 0)
+        if (getY() <= -100)
             remove();
 
         /* Gravity */
@@ -108,18 +106,9 @@ public abstract class AbstractShell extends Actor
                     tank.decreaseHp(20);
                     Vector2 contactCoordinates = new Vector2(getWidth() * MathUtils.cosDeg(getRotation()), (getWidth() * MathUtils.sinDeg(getRotation()))).add(localToStageCoordinates(new Vector2(0, 0)));
                     new ExplosionAnimation(stage, contactCoordinates.x, contactCoordinates.y);
-
                     tank.fire(new HitDetectedEvent(tank));
                     if (tank.getHp() <= 0)
                         tank.remove();
-                    this.remove();
-                }
-            }
-            else if (actor instanceof Tree){
-                Tree tree = (Tree) actor;
-                if (Intersector.overlapConvexPolygons(getBoundaryPolygon(), tree.getBoundaryPolygon())) {
-                    Vector2 contactCoordinates = new Vector2(getWidth() * MathUtils.cosDeg(getRotation()), (getWidth() * MathUtils.sinDeg(getRotation()))).add(localToStageCoordinates(new Vector2(0, 0)));
-                    new ExplosionAnimation(stage, contactCoordinates.x, contactCoordinates.y);
                     this.remove();
                 }
             }
