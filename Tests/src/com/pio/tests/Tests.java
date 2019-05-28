@@ -4,9 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.pio.tanks.AbstractShell;
 import com.pio.tanks.BackgroundActors.Cloud;
 import com.pio.tanks.BackgroundActors.Tower;
 import com.pio.tanks.BackgroundActors.Tree;
+import com.pio.tanks.StandardShell;
 import com.pio.tanks.Tank;
 import org.junit.Before;
 import org.junit.Test;
@@ -81,4 +83,11 @@ public class Tests
         assertEquals(227, height, 0);
     }
 
+    @Test
+    public void detectHitTest(){
+        StandardShell shell = new StandardShell(stage, 50, 60,0,0);
+        Tank tank = new Tank(50, 50, stage, false);
+        shell.act((1/60f));
+        assertEquals(80, tank.getHp());
+    }
 }
