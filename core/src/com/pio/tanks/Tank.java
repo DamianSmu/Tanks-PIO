@@ -62,6 +62,19 @@ public class Tank extends Group
         setBoundaryPolygon(8);
     }
 
+    public Tank(float posX, float posY)
+    {
+        hp = 100;
+        ammoType0 = 5;
+        ammoType1 = 5;
+
+        ableToShoot = true;
+
+        setPosition(posX, posY);
+        setWidth(83);
+        setHeight(49);
+    }
+
     private void changeToLeft()
     {
         texture.flip(true, false);
