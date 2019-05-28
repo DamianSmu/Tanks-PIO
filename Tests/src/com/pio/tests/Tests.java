@@ -32,19 +32,19 @@ public class Tests
     @Test
     public void treePictureTest()
     {
-        assertTrue("Nie działa", Gdx.files.local("..\\core\\assets\\tree02.png").exists());
+        assertTrue("Texture \"treeXX.png\" not found", Gdx.files.internal("tree02.png").exists());
     }
 
     @Test
     public void cloudPictureTest()
     {
-        assertTrue("Nie działa", Gdx.files.local("..\\core\\assets\\cloud1.png").exists());
+        assertTrue("Texture \"cloudXX.png\" not found", Gdx.files.internal("cloud1.png").exists());
     }
 
     @Test
     public void bulletPictureTest()
     {
-        assertTrue("Nie działa", Gdx.files.local("..\\core\\assets\\tank_bullet3.png").exists());
+        assertTrue("Texture \"tank_bulletXX.png\" not found", Gdx.files.internal("tank_bullet3.png").exists());
     }
 
     @Test
@@ -57,7 +57,7 @@ public class Tests
     @Test
     public void treeTest()
     {
-        Tree t = new Tree(100,200);
+        Tree t = new Tree(stage,100,200);
         float posX = t.getX();
         assertEquals(150, posX, 50);
 
@@ -66,19 +66,19 @@ public class Tests
     @Test
     public void cloudTest()
     {
-        Cloud c = new Cloud(100,200);
+        Cloud c = new Cloud(stage, 100,200);
         float posX = c.getX();
         assertEquals(150, posX, 50);
     }
 
     @Test
     public void towerTest(){
-        Tower t =  new Tower(100,500);
+        Tower t =  new Tower(stage);
         float width = t.getWidth();
         float height = t.getHeight();
 
-        assertEquals(100, width, 0);
-        assertEquals(500, height, 0);
+        assertEquals(66, width, 0);
+        assertEquals(227, height, 0);
     }
 
 }

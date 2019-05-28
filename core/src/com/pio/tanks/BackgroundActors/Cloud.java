@@ -29,17 +29,6 @@ public class Cloud extends Actor
         toFront();
     }
 
-    public Cloud(int lowerXBoundary, int upperXBoundary)
-    {
-        Random random = new Random();
-        speed =  (random.nextFloat() / 5f) + 0.01f;
-        if (random.nextBoolean())
-            speed *= -1f;
-        setSize(228, 124);
-
-        setPosition(random.nextFloat() * (upperXBoundary - lowerXBoundary) + lowerXBoundary, 400 + random.nextInt(300));
-    }
-
     @Override
     public void act(float delta)
     {

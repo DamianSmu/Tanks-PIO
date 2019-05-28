@@ -26,14 +26,6 @@ public class Tower extends Actor
         setBoundaryPolygon(8);
     }
 
-    public Tower(int x, int y)
-    {
-        setSize(x, y);
-
-        setPosition(500, 100);
-        setBoundaryPolygon(8);
-    }
-
     public Polygon getBoundaryPolygon()
     {
         boundaryPolygon.setPosition(getX(), getY());

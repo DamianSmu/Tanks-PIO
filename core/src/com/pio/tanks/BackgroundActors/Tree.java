@@ -43,19 +43,6 @@ public class Tree extends Actor
         setBoundaryPolygon(8);
     }
 
-    public Tree(int lowerXBoundary, int upperXBoundary)
-    {
-        random = new Random();
-        setSize(68, 146);
-
-        isFallen = false;
-
-        setPosition((int)(random.nextDouble() * (upperXBoundary - lowerXBoundary) + lowerXBoundary), random.nextInt(80) + 60);
-        setScale(1.8f - getY()/120);
-        setOrigin(getWidth()/2f, 0);
-
-    }
-
     public Polygon getBoundaryPolygon()
     {
         boundaryPolygon.setPosition(getX(), getY());
