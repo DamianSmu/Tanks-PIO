@@ -1,12 +1,14 @@
 package com.pio.tests;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.pio.tanks.BackgroundActors.Cloud;
 import com.pio.tanks.BackgroundActors.Tower;
 import com.pio.tanks.BackgroundActors.Tree;
-import com.pio.tanks.BackgroundManager;
 import com.pio.tanks.Tank;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -18,6 +20,15 @@ import static org.junit.Assert.assertTrue;
 @RunWith(GdxTestRunner.class)
 public class Tests
 {
+    private Stage stage;
+
+    @Before
+    public void initStage()
+    {
+        stage = new Stage(new FitViewport(1000, 800), Mockito.mock(SpriteBatch.class));
+    }
+
+
     @Test
     public void treePictureTest()
     {
@@ -39,7 +50,7 @@ public class Tests
     @Test
     public void tankTest()
     {
-        Tank t = new Tank(0,0);
+        Tank t = new Tank(0, 0, stage, false);
         assertTrue(t.isAbleToShoot());
     }
 
@@ -69,4 +80,5 @@ public class Tests
         assertEquals(100, width, 0);
         assertEquals(500, height, 0);
     }
+
 }
