@@ -90,4 +90,10 @@ public class Tests
         shell.act((1/60f));
         assertEquals(80, tank.getHp());
     }
+
+    @Test
+    public void powerPictureTest()
+    {
+        assertTrue("Texture \"power.png\" not found", Gdx.files.internal("power.png").exists());
+    }
 }
