@@ -96,4 +96,11 @@ public class Tests
     {
         assertTrue("Texture \"power.png\" not found", Gdx.files.internal("power.png").exists());
     }
+
+    @Test
+    public void tankHpTest()
+    {
+        Tank tk = new Tank(0, 0, stage, false);
+        assertEquals(100, tk.getHp());
+    }
 }
